@@ -17,13 +17,14 @@ An example application is at `/examples`. Simply spin this up in CommandBox for 
 ## Usage
 The Dachser CFML wrapper currently consists of a single models, representing Dachser's 'Shipment History' API.
 The wrapper may be used standalone, or as a ColdBox module.
+Obtain API keys and associate modules to your Dachser application here: https://api-portal.dachser.com/
 
 
 ### Standalone
 ```cfc
-	dachser = new models.dachser(
-		apikey = "YOUR_API_KEY"
-	);
+dachser = new models.dachser(
+	apikey = "YOUR_API_KEY"
+);
 ```
 
 ### ColdBox
@@ -39,7 +40,7 @@ When using with ColdBox, you'll want to insert your API authentication details i
 
 ```cfc
 dachsercfml = {
-		apikey 		= getSystemSetting("DACHSER_API_KEY", "")
+	apikey = getSystemSetting("DACHSER_API_KEY", "")
 }
 ```
 
