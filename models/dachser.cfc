@@ -7,7 +7,9 @@ component singleton accessors="true" {
 	property name="apikey" 	type="string";
 	property name="apiurl"  type="string" default="https://api.dachser.com/rest/v2/";
 
+	property name="deliveryNotes";
 	property name="shipmentHistory";
+	property name="shipmentStatus";
 
 	/**
 	 * Constructor
@@ -17,8 +19,14 @@ component singleton accessors="true" {
 		required string apikey 
 	){  
 		setApikey(Arguments.apikey);
+		setDeliveryNotes(new deliveryNotes());
+		getDeliveryNotes().setApikey(Arguments.apikey);
+
 		setShipmentHistory(new shipmentHistory());
 		getShipmentHistory().setApikey(Arguments.apikey);
+
+		setShipmentStatus(new shipmentStatus());
+		getShipmentStatus().setApikey(Arguments.apikey);
 
 		return this;
 	}

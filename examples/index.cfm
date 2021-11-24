@@ -17,8 +17,18 @@
 		);
 	}
 
-	if (StructKeyExists(Variables, 'Dachser') && StructKeyExists(Form, 'trackingnumber') && Len(Form.trackingnumber)) {
-		shipmentHistory = Dachser.getShipmentHistory().retrieve(Form.trackingnumber);
+	if (StructKeyExists(Variables, 'Dachser') && StructKeyExists(Form, 'shippingHistory_trackingnumber') && Len(Form.shippingHistory_trackingnumber)) {
+		results = Dachser.getShipmentHistory().retrieve(Form.shippingHistory_trackingnumber);
+	}
+
+	if (StructKeyExists(Variables, 'Dachser') && StructKeyExists(Form, 'shippingStatus_trackingnumber') && Len(Form.shippingStatus_trackingnumber)) {
+		results = Dachser.getShipmentStatus().retrieve(Form.shippingStatus_trackingnumber);
+	}
+
+	if (StructKeyExists(Variables, 'Dachser') && StructKeyExists(Form, 'action_deliveryNotes')) {
+		results = Dachser.getDeliveryNotes().retrieve(
+			ArgumentCollection = Form
+		);
 	}
 </cfscript>
 
@@ -39,26 +49,68 @@
 
 			<div class="row">
 				<cfif structKeyExists(Variables, 'Dachser')>
-					<div class="col-sm-6">
-						<div class="mr-6">
-							<h2>Shipment History</h2>
-							<p>Provide a tracking number or order number to retrieve details about a consignment.</p>
+					<div class="col-sm-7">
+						<div class="mr-7">
+							<h2>Shipment Status</h2>
+							<p>Provide a tracking number or order number to retrieve the status of one or more consignments.</p>
 							<form method="POST">
 								<div class="input-group">
-									<input type="text" required="true" class="form-control" id="trackingnumber" name="trackingnumber" aria-describedby="trackingnumber" placeholder="Enter a tracking number" value="#StructKeyExists(Form, 'trackingNumber') ? encodeForHTML(Form.trackingNumber) : ''#">
+									<input type="text" required="true" class="form-control" id="shippingStatus_trackingnumber" name="shippingStatus_trackingnumber" aria-describedby="shippingStatus_trackingnumber" placeholder="Enter a tracking number" value="#StructKeyExists(Form, 'shippingStatus_trackingNumber') ? encodeForHTML(Form.shippingStatus_trackingNumber) : ''#">
 									<div class="input-group-append">
-										<button type="submit" class="btn btn-primary" type="button" name="action" value="tracking">Query Dachser shipment history API</button>
+										<button type="submit" class="btn btn-primary" type="button" name="action_shipmentStatus" value="tracking">Query Dachser shipment status API</button>
 									</div>
 								</div>
 							</form>
 						</div>
+
+						<hr />
+
+						<div class="mr-7">
+							<h2>Shipment History</h2>
+							<p>Provide a tracking number or order number to retrieve details about one or more consignments.</p>
+							<form method="POST">
+								<div class="input-group">
+									<input type="text" required="true" class="form-control" id="shippingHistory_trackingnumber" name="shippingHistory_trackingnumber" aria-describedby="shippingHistory_trackingnumber" placeholder="Enter a tracking number" value="#StructKeyExists(Form, 'shippingHistory_trackingNumber') ? encodeForHTML(Form.shippingHistory_trackingNumber) : ''#">
+									<div class="input-group-append">
+										<button type="submit" class="btn btn-primary" type="button" name="action_shipmentHistory" value="tracking">Query Dachser shipment history API</button>
+									</div>
+								</div>
+							</form>
+						</div>
+
+						<hr />
+
+						<div class="mr-7">
+							<h2>Delivery Notes</h2>
+							<p>Retrieve delivery notes</p>
+							<form method="POST">
+								<div class="input-group">
+									<input type="text" class="form-control" id="referenceNumber1" name="referenceNumber1" aria-describedby="referenceNumber1" placeholder="Enter reference number 1" value="#StructKeyExists(Form, 'referenceNumber1') ? encodeForHTML(Form.referenceNumber1) : ''#">
+									<input type="text" class="form-control" id="referenceNumber2" name="referenceNumber2" aria-describedby="referenceNumber2" placeholder="Enter reference number 2" value="#StructKeyExists(Form, 'referenceNumber2') ? encodeForHTML(Form.referenceNumber2) : ''#">
+								</div>
+
+								<div class="input-group">
+									<input type="text" class="form-control" id="referenceNumber3" name="referenceNumber3" aria-describedby="referenceNumber3" placeholder="Enter reference number 3" value="#StructKeyExists(Form, 'referenceNumber3') ? encodeForHTML(Form.referenceNumber3) : ''#">
+									<input type="text" class="form-control" id="referenceNumber4" name="referenceNumber4" aria-describedby="referenceNumber4" placeholder="Enter reference number 4" value="#StructKeyExists(Form, 'referenceNumber4') ? encodeForHTML(Form.referenceNumber4) : ''#">
+								</div>
+
+								<div class="input-group">
+									<input type="date" class="form-control" id="deliveryOrderDate" name="deliveryOrderDate" aria-describedby="deliveryOrderDate" placeholder="Delivery order date" value="#StructKeyExists(Form, 'deliveryOrderDate') ? encodeForHTML(Form.deliveryOrderDate) : ''#">
+									<input type="text" class="form-control" id="purchaseOrderNumber" name="purchaseOrderNumber" aria-describedby="purchaseOrderNumber" placeholder="Purchase order number" value="#StructKeyExists(Form, 'purchaseOrderNumber') ? encodeForHTML(Form.purchaseOrderNumber) : ''#">
+								</div>
+
+								<div class="input-group-append">
+									<button type="submit" class="btn btn-primary" type="button" name="action_deliveryNotes" value="tracking">Query Dachser delivery notes API</button>
+								</div>
+							</form>
+						</div>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-5">
 						<h3>API key</h3>
 						<p>#EncodeForHTML(dachser.getApikey())# <a href="?clearAPI" class="btn btn-danger btn-sm">Clear</a></p>
 					</div>
 				<cfelse> 
-					<div class="col-sm-6">
+					<div class="col-sm-5">
 						<div class="mr-6">
 							<h2>API Key</h2>
 							<p>Provide an active key to use the Dascher API</p>
@@ -75,9 +127,9 @@
 				</cfif>
 			</div>
 
-			<cfif structKeyExists(Variables, 'shipmentHistory')>
+			<cfif structKeyExists(Variables, 'results')>
 				<hr />
-				<cfdump var="#shipmentHistory#">
+				<cfdump var="#results#">
 			</cfif>
 
 			</cfoutput>
