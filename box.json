@@ -1,8 +1,8 @@
 {
     "name":"Dachser CFML",
-    "version":"0.1.0",
+    "version":"0.2.0",
     "author":"Gary Stanton",
-    "location":"GaryStanton/dachser-cfml#v0.1.0",
+    "location":"GaryStanton/dachser-cfml#v0.2.0",
     "repository":{
         "type":"git",
         "URL":"https://github.com/GaryStanton/dachser-cfml"
